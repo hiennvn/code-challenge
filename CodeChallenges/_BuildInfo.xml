@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" ?>
+<buildInfo>
+    <projectName>Code Challenge</projectName>
+    <companyName></companyName>
+    <versionMajor>0</versionMajor>
+    <versionMinor>1</versionMinor>
+    <versionPatch>1</versionPatch>
+    <buildNumber>1</buildNumber>
+    <revision>5</revision>
+    <version>0.1.1.0</version>
+    <repositoryPath>https://github.com/hiennvn/code-challenge</repositoryPath>
+    <microsoftNetFramework>net-4.5</microsoftNetFramework>
+    <msbuildConfiguration>Release</msbuildConfiguration>
+    <msbuildPlatform>Any CPU</msbuildPlatform>
+    <builtWith>MSBuild v. 4.5</builtWith>
+</buildInfo>

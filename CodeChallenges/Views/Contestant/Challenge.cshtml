@@ -1,0 +1,114 @@
+﻿@model CodeChallenges.Models.YourChallenge
+@using CodeChallenges.Utils;
+
+@{
+    ViewBag.Title = "Challenge";
+    CodeChallenges.Models.YourChallenge ConvertedModel = (CodeChallenges.Models.YourChallenge)TimeZoneUtil.FromUTC( Model );
+}
+
+<h2>@Html.DisplayFor( model => model.Challenge.Name )</h2>
+<fieldset>
+    <legend>Information</legend>
+
+    <div>
+        @Html.Raw( Model.Challenge.Description )
+    </div>
+    <p />
+
+    @(Html.Telerik().Grid<CodeChallenges.Models.YourChallenge>( new List<CodeChallenges.Models.YourChallenge> { Model } )
+        .Name( "grid" )
+        .Columns( columns =>
+        {
+            columns.Bound( c => c.Challenge.StartTime ).Width( "50%" );
+            columns.Bound( c => c.Challenge.EndTime ).Width( "50%" );
+        } )
+    )
+    <p />
+
+    <h3>Problems</h3>
+    @(Html.Telerik().Grid<CodeChallenges.Models.YourProblem>( Model.Problems )
+        .Name( "grid" )
+        .Columns( columns =>
+        {
+            columns.Bound( p => p.Problem.Title ).Width( "20%" );
+            columns.Bound( p => p.Status ).Width( "10%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.FirstAttempt ) )
+                </text> ).Title( "First Attempt" ).Width( "20%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.LastAttempt ) )
+                </text> ).Title( "Last Attempt" ).Width( "20%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.FirstResolved ) )
+                </text> ).Title( "First Resolved" ).Width( "20%" );
+            columns.Template(
+                @<text>
+                    @if ( @item.CanOpen )
+                    {
+                        @Html.ActionLink( "Open", "Problem", new { id = @item.Problem.Id } )
+                    }
+                </text>
+                    ).Width( "10%" );
+        } )
+    )
+</fieldset>
+<p />
+
+<fieldset>
+    <legend>Your record</legend>
+
+    <div class="info">
+        <div class="field-item">
+            <div class="field-title">Open</div>
+            <div class="field-value">
+                @Html.Raw( ( Model.StartTime == null ) ? "Not open" : TimeZoneUtil.ConvertDateTimeFromUTC( Model.StartTime ).ToString() )
+            </div>
+        </div>
+        <div class="field-item">
+            <div class="field-title">Correct</div>
+            <div class="field-value">
+                @Html.Raw( ( Model.CorrectTime == null ) ? "Not calculated" : TimeZoneUtil.ConvertDateTimeFromUTC( Model.CorrectTime ).ToString() )
+            </div>
+        </div>
+        <div class="field-item">
+            <div class="field-title">Duration</div>
+            <div class="field-value">
+                @Html.Raw( ( Model.Duration == null ) ? "Not calculated" : Model.Duration.ToString() )
+            </div>
+        </div>
+        <div class="field-item">
+            <div class="field-title">Solved/Total</div>
+            <div class="field-value">
+                @Html.Raw( String.Format( "{0} / {1}", Model.NumberOfSolvedProblem, Model.NumberOfProblem ) )
+            </div>
+        </div>
+    </div>
+</fieldset>
+<p />
+
+@if ( @ViewBag.RankingTable != null )
+{
+    <fieldset>
+        <legend>Ranking Table</legend>
+        @(Html.Telerik().Grid<CodeChallenges.Models.RankingItem>( ( (CodeChallenges.Models.RankingTable)@ViewBag.RankingTable ).Items )
+        .Name( "grid" )
+        .Columns( columns =>
+        {
+            columns.Bound( i => i.UserProfile.FullName ).Title( "User" ).Width( "20%" );
+            columns.Bound( i => i.NumberOfSolvedProblem ).Title( "Solved" ).Width( "10%" );
+            columns.Bound( i => i.Duration ).Title( "Time" ).Width( "15%" );
+            columns.Bound( i => i.NumberOfSubmission ).Title( "Submission" ).Width( "10%" );
+            columns.Template( @<text>
+                @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.FirstAttempt ) )
+            </text> ).Title( "First Attempt" ).Width( "25%" );
+            columns.Template( @<text>
+                @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.CorrectTime ) )
+            </text> ).Title( "Last Correct" ).Width( "25%" );
+
+        } )
+        )
+    </fieldset>
+}

@@ -1,0 +1,90 @@
+﻿@model CodeChallenges.Models.YourProblem
+@using CodeChallenges.Utils;
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>@Html.Raw( Model.Problem.Title )</h2>
+
+<fieldset>
+    <legend>Information</legend>
+
+    <div>
+        <b>@Html.Raw( Model.Problem.Description )</b>
+    </div>
+    <div>
+        @Html.Raw( Model.Problem.Content )
+    </div>
+
+    @if ( !String.IsNullOrEmpty( Model.Problem.SampleInput ) )
+    {
+        <div>
+            <b>Sample input</b>
+        </div>
+        <div>
+            @Html.Raw( Model.Problem.SampleInput )
+        </div>
+    }
+
+    @if ( !String.IsNullOrEmpty( Model.Problem.SampleOutput ) )
+    {
+        <div>
+            <b>Sample output</b>
+        </div>
+        <div>
+            @Html.Raw( Model.Problem.SampleOutput )
+        </div>
+    }
+
+    @if ( !String.IsNullOrEmpty( Model.Problem.Input ) )
+    {
+        <div>
+            <b>Input</b>
+        </div>
+        <div>
+            @Html.Raw( Model.Problem.Input )
+        </div>
+    }
+</fieldset>
+<p />
+@using ( Html.BeginForm() )
+{
+    <fieldset>
+        <legend>Submission</legend>
+
+        @Html.Hidden( Constants.FORM_PROBLEM_ID, Model.Problem.Id )
+
+        <div class="display-label">Please submit your RESULT only</div>
+        <div class="display-field">
+            @Html.TextArea( Constants.FORM_PROBLEM_RESULT )
+        </div>
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </fieldset>
+}
+
+<p />
+<fieldset>
+    <legend>Your submission history</legend>
+    @(Html.Telerik().Grid<CodeChallenges.Models.Submission>( Model.Submissions )
+        .Name( "grid" )
+        .Columns( columns =>
+        {
+            columns.Template(
+                @<text>
+                    @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.Time ) )
+                </text>
+                ).Title( "Time" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( ( item.Result == null || item.Result == 0 ) ? "FAIL" : "PASSED" )
+                </text> ).Title( "Result" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( item.Content.Substring( 0, Math.Min( 30, item.Content.Length ) ) )
+                </text> ).Title( "Content" );
+        } )
+    )
+</fieldset>

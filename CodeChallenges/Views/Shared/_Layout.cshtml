@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render( "~/Content/css" )
+    @Scripts.Render( "~/bundles/modernizr" )
+    @(Html.Telerik().StyleSheetRegistrar().DefaultGroup( group => group.Add( "telerik.common.css" ).Add( "telerik.windows7.css" ).Combined( true ).Compress( true ) ))
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p class="site-title">@Html.ActionLink( "Code Challenges", "Index", "Home" )</p>
+            </div>
+            <div class="float-right">
+                <section id="login">
+                    @Html.Partial( "_LoginPartial" )
+                </section>
+                <nav>
+                    <ul id="menu">
+                        <li>@Html.ActionLink( "Home", "Index", "Home" )</li>
+                        @if ( User != null )
+                        {
+                            <li>@Html.ActionLink( "CHALLENGES", "Index", "Contestant" )</li>
+                        }
+                        @try
+                        {
+                            if ( Roles.IsUserInRole( CodeChallenges.Utils.Constants.ROLE_ADMINISTRATOR ) )
+                            {
+                                <li>@Html.ActionLink( "Settings", "Index", "Settings" )</li>
+                                <li>@Html.ActionLink( "Challenges", "Index", "Challenge" )</li>
+                                <li>@Html.ActionLink( "Problems", "Index", "Problem" )</li>
+                            }
+                        }
+                        catch ( Exception ) { }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <div id="body">
+        @RenderSection( "featured", required: false )
+        <section class="content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+        <div class="content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - Hien Nguyen</p>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render( "~/bundles/jquery" )
+    @RenderSection( "scripts", required: false )
+    @(Html.Telerik().ScriptRegistrar())
+</body>
+</html>

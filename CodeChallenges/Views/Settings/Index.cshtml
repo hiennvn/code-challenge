@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CodeChallenges.Models.Setting>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink( "Create New", "Create" )
+</p>
+
+@(Html.Telerik().Grid<CodeChallenges.Models.Setting>( Model )
+        .Name( "grid" )
+        .DataKeys( keys => keys
+            .Add( c => c.Id )
+            .RouteKey( "Id" ) )
+        .Columns( columns =>
+        {
+            columns.Bound( c => c.Key );
+            columns.Bound( c => c.Value );
+            columns.Bound( c => c.Version );
+            columns.Template(
+                @<text>
+                    @Html.ActionLink( "Edit", "Edit", new { id = item.Id } ) |
+                    @Html.ActionLink( "Details", "Details", new { id = item.Id } ) |
+                    @Html.ActionLink( "Delete", "Delete", new { id = item.Id } )
+                </text>
+    ).Title( "Action" );
+        } )
+                                .Scrollable()
+                                .Sortable()
+)

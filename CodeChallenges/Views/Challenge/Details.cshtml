@@ -1,0 +1,43 @@
+﻿@model CodeChallenges.Models.Challenge
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Challenge</legend>
+
+    <div class="display-label">
+        @Html.DisplayNameFor( model => model.Name )
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor( model => model.Name )
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor( model => model.CreateDate )
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor( model => model.CreateDate )
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor( model => model.StartTime )
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor( model => model.StartTime )
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor( model => model.EndTime )
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor( model => model.EndTime )
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink( "Edit", "Edit", new { id = Model.Id } ) |
+    @Html.ActionLink( "Back to List", "Index" )
+</p>

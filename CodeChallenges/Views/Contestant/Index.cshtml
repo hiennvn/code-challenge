@@ -1,0 +1,65 @@
+﻿@model IDictionary<string, IEnumerable<CodeChallenges.Models.YourChallenge>>
+@using CodeChallenges.Utils;
+
+@{
+    ViewBag.Title = "Challenges";
+}
+
+<h2>Challenges</h2>
+
+<h3>Active challenges</h3>
+@(Html.Telerik().Grid<CodeChallenges.Models.YourChallenge>( Model[ "ActiveChallenges" ] )
+        .Name( "grid" )
+        .DataKeys( keys => keys
+            .Add( c => c.Challenge.Id )
+            .RouteKey( "Id" ) )
+        .Columns( columns =>
+        {
+            columns.Bound( c => c.Challenge.Name ).Title( "Challenge" ).Width( "40%" );
+            columns.Bound( c => c.Challenge.StartTime ).Title( "Start" ).Width( "20%" );
+            columns.Bound( c => c.Challenge.EndTime ).Title( "End" ).Width( "20%" );
+            columns.Bound( c => c.NumberOfProblem ).Title( "Problem" ).HtmlAttributes( new { style = "text-align: right;" } ).Width( "10%" );
+            columns.Template(
+                @<text>
+                    @Html.ActionLink( ( item.StartTime == null ) ? "Start" : "Open", "Challenge", new { id = item.Challenge.Id } )
+                </text>
+            ).Width( "10%" );
+        } )
+)
+<p />
+
+<h3>Your challenges</h3>
+@(Html.Telerik().Grid<CodeChallenges.Models.YourChallenge>( Model[ "YourChallenges" ] )
+        .Name( "grid" )
+        .DataKeys( keys => keys
+            .Add( c => c.Challenge.Id )
+            .RouteKey( "Id" ) )
+        .Columns( columns =>
+        {
+            columns.Template(
+                @<text>
+                    @Html.ActionLink( item.Challenge.Name, "Challenge", new { id = item.Challenge.Id } )
+                </text>
+                ).Title( "Challenge" ).Width( "40%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( item.Challenge.StartTime )<br />
+                    @Html.Raw( item.Challenge.EndTime )
+                </text>
+                ).Title( "Start / End" ).Width( "20%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( ( item.Duration == null ) ? String.Empty : item.Duration.Value.ToString( @"dd\.hh\:mm\:ss" ) )
+                </text> ).Title( "Time" ).Width( "10%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.StartTime ) )<br />
+                    @Html.Raw( TimeZoneUtil.ConvertDateTimeFromUTC( item.CorrectTime ) )
+                </text>
+                        ).Title( "Open / Correct" ).Width( "20%" );
+            columns.Template(
+                @<text>
+                    @Html.Raw( item.NumberOfSolvedProblem.ToString() ) / @Html.Raw( item.NumberOfProblem.ToString() )
+                </text> ).Title( "Solved / Total" ).HtmlAttributes( new { style = "text-align: right;" } ).Width( "10%" );
+        } )
+)

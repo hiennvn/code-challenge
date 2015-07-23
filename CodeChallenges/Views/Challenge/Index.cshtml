@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CodeChallenges.Models.Challenge>
+@using CodeChallenges.Utils;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p />
+@Html.ActionLink( "Create New", "Create" )
+<p />
+
+@(Html.Telerik().Grid<CodeChallenges.Models.Challenge>( Model )
+        .Name( "grid" )
+        .DataKeys( keys => keys
+            .Add( c => c.Id )
+            .RouteKey( "Id" ) )
+        .Columns( columns =>
+        {
+            columns.Bound( c => c.Name );
+            columns.Bound( c => c.StartTime );
+            columns.Bound( c => c.EndTime );
+            columns.Bound( c => c.CreateDate );
+            columns.Template(
+                @<text>
+                    @{
+                        DateTime? now = TimeZoneUtil.ConvertDateTimeFromUTC( DateTime.UtcNow );
+                        string start = "-";
+                        if ( item.StartTime < now && now < item.EndTime )
+                        {
+                            start = "Start";
+                        }
+                    }
+                    @Html.ActionLink( start, "Start", new { id = item.Id } )
+                </text>
+            );
+
+            columns.Template(
+                @<text>
+                    @Html.ActionLink( "Edit", "Edit", new { id = item.Id } ) |
+                    @Html.ActionLink( "Details", "Details", new { id = item.Id } ) |
+                    @Html.ActionLink( "Delete", "Delete", new { id = item.Id } )
+                </text>
+    ).Title( "Action" );
+        } )
+                                .Scrollable()
+                                .Sortable()
+)

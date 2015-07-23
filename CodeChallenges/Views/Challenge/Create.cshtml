@@ -1,0 +1,68 @@
+﻿@model CodeChallenges.Models.Challenge
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using ( Html.BeginForm() )
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary( true )
+
+    <fieldset>
+        <legend>Challenge</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor( model => model.Name )
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor( model => model.Name )
+            @Html.ValidationMessageFor( model => model.Name )
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor( model => model.StartTime )
+        </div>
+        <div class="editor-field">
+            @(Html.Telerik().DateTimePicker()
+            .Name( "StartTime" )
+            .Value( DateTime.Now ))
+            @Html.ValidationMessageFor( model => model.StartTime )
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor( model => model.EndTime )
+        </div>
+        <div class="editor-field">
+            @(Html.Telerik().DateTimePicker()
+            .Name( "EndTime" )
+            .Value( DateTime.Now ))
+            @Html.ValidationMessageFor( model => model.EndTime )
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor( model => model.Description )
+        </div>
+        <div class="editor-field">
+            @(Html.Telerik().Editor()
+      .Name( "Description" )
+      .HtmlAttributes( new { style = "width: 740px;height:440px" } )
+      .Value( @<text></text> )
+            )
+            @Html.ValidationMessageFor( model => model.Description )
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink( "Back to List", "Index" )
+</div>
+
+@section Scripts {
+    @Scripts.Render( "~/bundles/jqueryval" )
+}
